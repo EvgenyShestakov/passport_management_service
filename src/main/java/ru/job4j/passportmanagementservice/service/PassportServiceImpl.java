@@ -3,10 +3,8 @@ package ru.job4j.passportmanagementservice.service;
 import org.springframework.stereotype.Service;
 import ru.job4j.passportmanagementservice.domain.Passport;
 import ru.job4j.passportmanagementservice.repository.PassportRepository;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PassportServiceImpl implements PassportService {
@@ -17,19 +15,29 @@ public class PassportServiceImpl implements PassportService {
     }
 
     @Override
-    public Passport save(Passport passport) {
-        return passportRepository.save(passport);
+    public Optional<Passport> save(Passport passport) {
+        Optional<Passport> findPassport = passportRepository.
+                findPassportBySeriesAndNumber(passport.getSeries(), passport.getNumber());
+        Optional<Passport> savePassport = Optional.empty();
+        if (findPassport.isEmpty()) {
+            savePassport = Optional.of(passportRepository.save(passport));
+        }
+        return savePassport;
     }
 
-    public void deleteById(Long id) {
-        passportRepository.deleteById(id);
+    public Optional<Passport> deleteById(Long id) {
+        Optional<Passport> byId = passportRepository.findById(id);
+        byId.ifPresent(passport -> passportRepository.delete(passport));
+        return byId;
+    }
+
+    public Optional<Passport> findById(Long id) {
+        return passportRepository.findById(id);
     }
 
     @Override
-    public Collection<Passport> findAll() {
-        List<Passport> passports = new ArrayList<>();
-        passportRepository.findAll().forEach(passports::add);
-        return passports;
+    public Iterable<Passport> findAll() {
+        return passportRepository.findAll();
     }
 
     @Override
@@ -44,6 +52,6 @@ public class PassportServiceImpl implements PassportService {
 
     @Override
     public Collection<Passport> findReplaceAble() {
-        return passportRepository.findReplaceable(LocalDate.now().plusMonths(3));
+        return passportRepository.findReplaceable();
     }
 }

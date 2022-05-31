@@ -2,13 +2,16 @@ package ru.job4j.passportmanagementservice.service;
 
 import ru.job4j.passportmanagementservice.domain.Passport;
 import java.util.Collection;
+import java.util.Optional;
 
 public interface PassportService {
-Passport save(Passport passport);
+Optional<Passport> save(Passport passport);
 
-void deleteById(Long id);
+Optional<Passport> findById(Long id);
 
-Collection<Passport> findAll();
+Optional<Passport> deleteById(Long id);
+
+Iterable<Passport> findAll();
 
 Collection<Passport> findBySeries(Long series);
 

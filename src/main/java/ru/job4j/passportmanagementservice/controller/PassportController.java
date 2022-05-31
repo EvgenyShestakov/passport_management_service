@@ -3,9 +3,9 @@ package ru.job4j.passportmanagementservice.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.passportmanagementservice.domain.Passport;
 import ru.job4j.passportmanagementservice.service.PassportService;
-
 import java.util.Collection;
 
 @RestController
@@ -18,8 +18,8 @@ public class PassportController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Collection<Passport>> findAllPassports() {
-    return new ResponseEntity<>(passportService.findAll(), HttpStatus.FOUND);
+    public ResponseEntity<Iterable<Passport>> findAllPassports() {
+        return new ResponseEntity<>(passportService.findAll(), HttpStatus.FOUND);
     }
 
     @GetMapping("/series/{series}")
@@ -39,18 +39,28 @@ public class PassportController {
 
     @PostMapping("/save")
     public ResponseEntity<Passport> save(@RequestBody Passport passport) {
-      return new ResponseEntity<>(passportService.save(passport), HttpStatus.CREATED);
+        Passport savedPassport = passportService.save(passport).orElseThrow(()
+                -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                "Passport already exists"));
+        return new ResponseEntity<>(savedPassport, HttpStatus.CREATED);
     }
 
     @PutMapping("/replace")
     public ResponseEntity<Void> replace(@RequestBody Passport passport) {
-        passportService.save(passport);
-    return ResponseEntity.ok().build();
+        passportService.findById(passport.getId()).orElseThrow(()
+                -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                "Passport is not found"));
+        passportService.save(passport).orElseThrow(()
+                -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                "Passport already exists"));
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        passportService.deleteById(id);
-    return ResponseEntity.ok().build();
+        passportService.deleteById(id).orElseThrow(()
+                -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                "Passport is not found"));
+        return ResponseEntity.ok().build();
     }
 }

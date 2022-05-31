@@ -60,8 +60,7 @@ public class ClientController {
     public ResponseEntity<Passport> save(@Valid @RequestBody Passport passport) {
         Passport rsl = rest.postForObject("http://localhost:8080/passport/save",
                 passport, Passport.class);
-        return new ResponseEntity<>(rsl, HttpStatus.CREATED
-        );
+        return new ResponseEntity<>(rsl, HttpStatus.CREATED);
     }
 
     @PutMapping("/")
