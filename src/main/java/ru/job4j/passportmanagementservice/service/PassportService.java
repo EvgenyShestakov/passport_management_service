@@ -15,7 +15,7 @@ Iterable<Passport> findAll();
 
 Collection<Passport> findBySeries(Long series);
 
-Collection<Passport> unavailable();
+Collection<Passport> findUnavailablePassports();
 
 Collection<Passport> findReplaceAble();
 }

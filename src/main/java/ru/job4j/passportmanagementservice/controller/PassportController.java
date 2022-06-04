@@ -29,7 +29,7 @@ public class PassportController {
 
     @GetMapping("/unavailable")
     public ResponseEntity<Collection<Passport>> unavailable() {
-        return new ResponseEntity<>(passportService.unavailable(), HttpStatus.FOUND);
+        return new ResponseEntity<>(passportService.findUnavailablePassports(), HttpStatus.FOUND);
     }
 
     @GetMapping("/replaceAbl")

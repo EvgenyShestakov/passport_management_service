@@ -10,7 +10,7 @@
     </parent>
     <groupId>ru.job4j</groupId>
     <artifactId>passport_management_service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1</version>
     <name>passport_management_service</name>
     <description>Educational project for Spring Boot</description>
     <properties>
@@ -127,9 +127,8 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${parent.version}</version>
+                <version>${project.parent.version}</version>
             </plugin>
         </plugins>
     </build>
-
 </project>

@@ -46,8 +46,8 @@ public class PassportServiceImpl implements PassportService {
     }
 
     @Override
-    public Collection<Passport> unavailable() {
-        return passportRepository.unavailable();
+    public Collection<Passport> findUnavailablePassports() {
+        return passportRepository.findUnavailablePassports();
     }
 
     @Override

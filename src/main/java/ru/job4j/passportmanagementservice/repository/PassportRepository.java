@@ -9,8 +9,9 @@ import java.util.Optional;
 public interface PassportRepository extends CrudRepository<Passport, Long> {
     Collection<Passport> findPassportBySeries(Long series);
 
-    @Query("select p from Passport p where p.expirationDate < current_date")
-    Collection<Passport> unavailable();
+    @Query(value = "select p from Passport p where p.expirationDate < current_date",
+            nativeQuery = true)
+    Collection<Passport> findUnavailablePassports();
 
     @Query(value = "select * from passport p where expiration_date between"
             + " current_date and current_date + interval '3 month'", nativeQuery = true)
